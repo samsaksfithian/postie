@@ -9,6 +9,7 @@ const UserList = ({ users }) => (
       {users.map(user => (
         <li key={user.id}>
           <p className="list-item-title">{user.username}</p>
+          {/* eslint-disable-next-line prettier/prettier */}
           <Link
             to={{ pathname: `/users/${user.id}`, state: { user } }}
             className="details"

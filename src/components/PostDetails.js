@@ -5,7 +5,7 @@ import '../css/PostDetails.css';
 
 export default class PostDetails extends Component {
   static propTypes = {
-    match: PropTypes.object,
+    match: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -32,18 +32,23 @@ export default class PostDetails extends Component {
   };
 
   getComments = async () => {
-    const commResponse = await API.getPostComments(this.props.match.params.postId);
-    this.setState({ comments: commResponse.data });
-    console.log('comments loaded');
+    try {
+      const commResponse = await API.getPostComments(this.props.match.params.postId);
+      this.setState({ comments: commResponse.data });
+    } catch (error) {
+      throw error;
+    }
   };
 
   getPostWithUser = async () => {
-    const postResponse = await API.getPost(this.props.match.params.postId);
-    this.setState({ post: postResponse.data });
-    console.log('post loaded');
-    const userResponse = await API.getUser(postResponse.data.userId);
-    this.setState({ postedBy: userResponse.data });
-    console.log('user loaded');
+    try {
+      const post = (await API.getPost(this.props.match.params.postId)).data;
+      this.setState({ post });
+      const postedBy = (await API.getUser(post.userId)).data;
+      this.setState({ postedBy });
+    } catch (error) {
+      throw error;
+    }
   };
 
   render() {
