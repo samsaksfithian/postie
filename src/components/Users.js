@@ -1,16 +1,24 @@
-import React, { Component } from 'react'
-import UserList from './UserList'
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
+import API from '../API';
+import UserList from './UserList';
+import UserDetails from './UserDetails';
 
-import '../css/Users.css'
+import '../css/Users.css';
 
 class Users extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       users: [],
-    }
+    };
   }
+
+  componentDidMount = async () => {
+    const response = await API.getAllUsers();
+    this.setState({ users: response.data });
+  };
 
   render() {
     return (
@@ -18,10 +26,11 @@ class Users extends Component {
         <h2>Users</h2>
         <div className="columns">
           <UserList users={this.state.users} />
+          <Route path="/users/:userId" component={UserDetails} />
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Users
+export default Users;
